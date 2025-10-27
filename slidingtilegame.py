@@ -53,15 +53,14 @@ def affiche_jeu(jeu):
 def position_valide(jeu, taille):
     """
     Vérifie si le jeu est une position valide pour la taille donnée
-    Retourne:
-        True si la position est valide, False sinon
+    retourne true si la position est valide, False sinon
     """
     # Vérifier que jeu a la bonne taille
-    if len(jeu) != taille:
+    if len(jeu) != taille: # verifie rangee
         return False
 
     for rangee in jeu:
-        if len(rangee) != taille:
+        if len(rangee) != taille: # verifie que chaque rangee a taille colonnes
             return False
 
     # Vérifie que tous les nombres de 0 à taille^2 - 1 sont présents une fois
@@ -149,11 +148,11 @@ def deplace(jeu, coup):
     coup = coup.upper() # majuscule
     if coup not in coups_valides(jeu): # coup doit etre dans coups valides
         return False
-    pos_vide = position(jeu, 0)
+    pos_vide = position(jeu, 0) # la position vide ou la tuile se deplacera
     rangee, colonne = pos_vide
 
     if coup == "W":
-        nouvelle_rangee, nouvelle_colonne = rangee + 1, colonne # on cherche la tuile en bas de l'espace vide
+        nouvelle_rangee, nouvelle_colonne = rangee + 1, colonne # on cherche la tuile en bas de l'espace vide (qui va devenir la nouvelle coordonnee de l'espace vide)
     elif coup =="A":
         nouvelle_rangee, nouvelle_colonne = rangee, colonne + 1 # on cherche la tuile a droite de l'espace vide
     elif coup == "S":
@@ -191,11 +190,12 @@ def deplace_seq(jeu, sequence):
 def melange(jeu, nbcoups):
     """melange le jeu en effectuant un nombre donne de coups aleatoires
     """
-    for _ in range(nbcoups): #nb de coups
-        coups = coups_valides(jeu) # coups valides
-        if coups:
-            coup = random.choice(coups) # coup random parmi coups valides
-            deplace(jeu, coup)
+    coups = coups_valides(jeu) # liste de coups valides
+
+    for _ in range(nbcoups): # effectue un coup valide aleatoire nbcoups fois
+        coup = random.choice(coups)
+        deplace(jeu, coup)
+
 
 
 # Tâche 10: Jouer une partie
@@ -207,14 +207,16 @@ def joue(jeu):
 
     while not est_gagnant(jeu):
         affiche_jeu(jeu)
-        print(f"\nCoups effectués: {nb_coups}")
+        print(f"Coups effectués: {nb_coups}")
         print(f"Coups valides: {', '.join(coups_valides(jeu))}")
 
-        coup = input("Entrez votre coup (W/A/S/D) ou Q pour quitter: ").upper() # demande coup
+        coups = ", ".join(coups_valides(jeu))
+
+        coup = input(f"Entrez votre coup {coups} ou Q pour quitter: ").upper() # demande coup
 
         if coup == 'Q':
             print("Partie abandonnée.")
-            return
+            return None
 
         if coup in coups_valides(jeu): # effectue coup
             deplace(jeu, coup)
@@ -223,7 +225,7 @@ def joue(jeu):
             print("Coup invalide! Essayez à nouveau.")
 
     affiche_jeu(jeu)
-    print(f"\nFélicitations! Vous avez résolu le jeu en {nb_coups} coups!") # partie gagnee
+    print(f"Félicitations! Vous avez résolu le jeu en {nb_coups} coups!") # partie gagnee
 
 
 # Tâche 11: Incrémenter les séquences
@@ -284,6 +286,7 @@ def resout(jeu, longueur_max):
 
 
 # Programme principal de test (decomenter pour essayer)
+
 # print("=== Jeu de Taquin ===\n")
 #
 # # Créer un jeu 3x3 et le mélanger
@@ -295,9 +298,11 @@ def resout(jeu, longueur_max):
 # ============================================
 # Tests rapides pour les fonctions optionnelles (decomenter pour essayer)
 # ============================================
-print("=== Tests des fonctions optionnelles ===")
 
-print("on teste cherche et resout avec un puzzle facile:")
+
+# print("=== Test des fonctions optionnelles ===")
+
+print("on teste cherche et resout avec un puzzle facile")
 puzzle_test = [[1, 3, 6], [4, 2, 8], [7, 5, 0]]
 affiche_jeu(puzzle_test)
 solution = resout(copy.deepcopy(puzzle_test), 8)
@@ -309,6 +314,6 @@ if solution:
 else:
     print("  Aucune solution trouvée")
 
-print("=== Fin des tests ===")
+print("=== Fin du test ===")
 
 
