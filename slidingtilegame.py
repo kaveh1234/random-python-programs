@@ -225,12 +225,90 @@ def joue(jeu):
     affiche_jeu(jeu)
     print(f"\nFélicitations! Vous avez résolu le jeu en {nb_coups} coups!") # partie gagnee
 
-# Programme principal de test
-print("=== Jeu de Taquin ===\n")
 
-# Créer un jeu 3x3 et le mélanger
-taquin = init_jeu(3)
-melange(taquin, 100)
-joue(taquin)
+# Tâche 11: Incrémenter les séquences
+def incremente_seq(liste):
+    """
+    Génère toutes les séquences d'un coup de plus que celles dans la liste
+
+    Retourne la liste de séquences d'un coup de plus
+    """
+    coups = ["W", "A", "S", "D"] # liste de coups
+    nouvelles_seq = [] # nouvelle liste avec sequences d'un coup de plus (4* longueur liste)
+
+    for seq in liste: # attache chaque coup a chaque coup de la liste
+        for coup in coups:
+            nouvelles_seq.append(seq + coup)
+    return nouvelles_seq
+
+
+# Tâche 12: Générer toutes les séquences d'une longueur
+def toutes_seq(longueur):
+    """
+    Génère toutes les séquences de coups d'une longueur donnée
+    Retourne la liste de toutes les sequences de cette longueur
+    """
+    sequences = [""] # commence avec la liste de la chaine vide et non la liste vide
+    for _ in range(longueur): # incremente selon la longueur
+        sequences = incremente_seq(sequences) # sequences reste la sequence de longueur longueur
+    return sequences
+
+
+# Tâche 13: Chercher une solution de longueur donnée
+def cherche(jeu, longueur):
+    """
+    Cherche une solution au jeu parmi les séquences d'une longueur donnée
+    retourne une séquence gagnante ou None
+    """
+    sequences = toutes_seq(longueur) # on genere toutes les sequences de longueur longueur
+    for seq in sequences:
+        jeu_temp = copy.deepcopy(jeu) # on genere une copie temporaire du jeu
+        if deplace_seq(jeu_temp, seq) and est_gagnant(jeu_temp): # si toutes les sequences ont ete effectuees et la position est gagnante, on retourne la sequence
+            return seq
+    return None
+
+
+# Tâche 14: Résoudre le jeu
+def resout(jeu, longueur_max):
+    """
+    Cherche une solution au jeu en essayant des séquences de longueur croissante
+    retourne une séquence gagnante ou None
+    """
+    for longueur in range(1, longueur_max + 1): # on essaie avec les sequences de longueur 1 a longueur_max
+        print(f"Essai de séquences de longueur {longueur}...")
+        solution = cherche(jeu, longueur)
+        if solution: # si solution est une liste de sequences, on la retourne (premiere sequence gagnante retrouvee)
+            return solution
+
+    return None
+
+
+# Programme principal de test (decomenter pour essayer)
+# print("=== Jeu de Taquin ===\n")
+#
+# # Créer un jeu 3x3 et le mélanger
+# taquin = init_jeu(4)
+# melange(taquin, 100)
+# joue(taquin)
+
+
+# ============================================
+# Tests rapides pour les fonctions optionnelles (decomenter pour essayer)
+# ============================================
+print("=== Tests des fonctions optionnelles ===")
+
+print("on teste cherche et resout avec un puzzle facile:")
+puzzle_test = [[1, 3, 6], [4, 2, 8], [7, 5, 0]]
+affiche_jeu(puzzle_test)
+solution = resout(copy.deepcopy(puzzle_test), 8)
+if solution:
+    print(f"  Solution trouvée: {solution}, de longueur: {len(solution)}")
+    test_copie = copy.deepcopy(puzzle_test)
+    deplace_seq(test_copie, solution) # on resout test_copie avec la solution
+    print(f"  Résolu correctement: {est_gagnant(test_copie)}")
+else:
+    print("  Aucune solution trouvée")
+
+print("=== Fin des tests ===")
 
 
