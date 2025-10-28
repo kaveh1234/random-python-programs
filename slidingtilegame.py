@@ -30,8 +30,8 @@ def affiche_jeu(jeu):
     """
     Prend une position en argument et l'affiche avec des bordures
     """
-    n = len(jeu)
-    ligne_sep = '+' + ('------+' * n)
+    longueur = len(jeu)
+    ligne_sep = '+' + ('------+' * longueur)
 
     for rangee in jeu:
         print(ligne_sep)
@@ -190,9 +190,8 @@ def deplace_seq(jeu, sequence):
 def melange(jeu, nbcoups):
     """melange le jeu en effectuant un nombre donne de coups aleatoires
     """
-    coups = coups_valides(jeu) # liste de coups valides
-
     for _ in range(nbcoups): # effectue un coup valide aleatoire nbcoups fois
+        coups = coups_valides(jeu) # liste de coups valides
         coup = random.choice(coups)
         deplace(jeu, coup)
 
