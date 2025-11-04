@@ -1,0 +1,37 @@
+prononciation = {
+
+}
+
+words = open("cmudict.txt", "r", encoding="utf-8")
+words_list = words.read().splitlines()
+words.close()
+
+all_word_elements = []
+for word in words_list:
+    word_elements = word.split(" ")
+    all_word_elements.append(word_elements)
+
+for element in all_word_elements:
+    prononciation[element[0]] = " ".join(element[1:])
+
+def homophones():
+    while True:
+        word = input("Enter a word: ")
+        if word == "":
+            break
+
+        word = word.upper()
+        if word not in prononciation:
+            print("Word not in prononciation, try another")
+        else:
+            pronounciation1 = prononciation[word]
+            homophones1 = []
+            for element in prononciation:
+                if prononciation[element] == pronounciation1 and element != word:
+                    homophones1.append(element)
+            if homophones1:
+                stuff = ", ".join(homophones1)
+                print(f"Homophones: {stuff}")
+            else:
+                print("No homophones")
+homophones()
