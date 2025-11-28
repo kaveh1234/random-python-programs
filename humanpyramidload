@@ -1,0 +1,24 @@
+def load(row, col, weight):
+    
+    if row == 0 and col == 0:
+        return 0
+    elif row < 0 or col < 0 or col > row:
+        return None
+    else:
+        
+        if col == 0:
+            return 0.5*(load(row-1, col, weight) + weight)
+
+        else:
+        
+            fardeau = 0
+            left = load(row-1, col-1, weight)
+            right = load(row-1, col+1, weight)
+            
+            if left is not None:
+                fardeau += 0.5 * (left + weight)
+            if right is not None:
+                fardeau += 0.5 * (right + weight)
+        
+        return fardeau
+            
