@@ -1,0 +1,15 @@
+def gain_maximum(temps, taches):
+    if taches == []:
+        return 0
+    else:
+        temps_tache, montant = taches[0]
+        autres_taches = taches[1:]
+        
+        if temps_tache > temps:
+            return gain_maximum(temps, autres_taches)
+        
+        else:
+            gain1 = gain_maximum(temps, autres_taches)
+            gain2 = montant + gain_maximum(temps - temps_tache, autres_taches)
+            
+            return max(gain1, gain2)
